@@ -26,7 +26,7 @@ class Evenement
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDernierEvent = null;
 
-    #[ORM\ManyToOne(inversedBy: 'evenements')]
+    #[ORM\ManyToOne(inversedBy: 'evenements', fetch: 'EAGER')]
     private ?Vehicule $vehicule = null;
 
     public function getId(): ?int

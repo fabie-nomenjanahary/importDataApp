@@ -55,15 +55,18 @@ class Vehicule
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $numeroDossier = null;
 
-    #[ORM\ManyToOne(inversedBy: 'vehicules')]
+    #[ORM\ManyToOne(inversedBy: 'vehicules', fetch: 'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Proprietaire $proprietaire = null;
 
-    #[ORM\OneToMany(targetEntity: Evenement::class, mappedBy: 'vehicule')]
+    #[ORM\OneToMany(targetEntity: Evenement::class, mappedBy: 'vehicule', fetch: 'EAGER')]
     private Collection $evenements;
 
-    #[ORM\ManyToOne(inversedBy: 'vehicules')]
+    #[ORM\ManyToOne(inversedBy: 'vehicules', fetch: 'EAGER')]
     private ?Compte $compte = null;
+
+    #[ORM\ManyToOne(inversedBy: 'vehicules', fetch: 'EAGER')]
+    private ?Vendeur $vendeur = null;
 
     public function __construct()
     {
@@ -281,6 +284,18 @@ class Vehicule
     public function setCompte(?Compte $compte): static
     {
         $this->compte = $compte;
+
+        return $this;
+    }
+
+    public function getVendeur(): ?Vendeur
+    {
+        return $this->vendeur;
+    }
+
+    public function setVendeur(?Vendeur $vendeur): static
+    {
+        $this->vendeur = $vendeur;
 
         return $this;
     }

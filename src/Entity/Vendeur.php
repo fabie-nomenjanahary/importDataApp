@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\VendeurRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VendeurRepository::class)]
@@ -21,6 +23,14 @@ class Vendeur
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $intermediaire = null;
+
+    #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'vendeur')]
+    private Collection $vehicules;
+
+    public function __construct()
+    {
+        $this->vehicules = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -59,6 +69,36 @@ class Vendeur
     public function setIntermediaire(?string $intermediaire): static
     {
         $this->intermediaire = $intermediaire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vehicule>
+     */
+    public function getVehicules(): Collection
+    {
+        return $this->vehicules;
+    }
+
+    public function addVehicule(Vehicule $vehicule): static
+    {
+        if (!$this->vehicules->contains($vehicule)) {
+            $this->vehicules->add($vehicule);
+            $vehicule->setVendeur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVehicule(Vehicule $vehicule): static
+    {
+        if ($this->vehicules->removeElement($vehicule)) {
+            // set the owning side to null (unless already changed)
+            if ($vehicule->getVendeur() === $this) {
+                $vehicule->setVendeur(null);
+            }
+        }
 
         return $this;
     }
