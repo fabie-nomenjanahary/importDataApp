@@ -1,9 +1,63 @@
 {% extends "base.html.twig" %}
+
 {% block body %}
-<h1>Upload Excel File</h1>
-{{ form_start(form) }}
-{{ form_row(form.data_file) }}
-<button type="submit">Importer</button>
-{{ form_end(form) }}
+<div class="container">
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#uploadModal">
+            <i class="fa fa-download"></i>
+        Importer
+        </button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="uploadModalLabel">Importer des données</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Pour importer des données, sélectionnez un fichier Excel
+            {{ form_start(form) }}
+            {{ form_row(form.data_file) }}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            <button type="submit" class="btn btn-primary">Importer</button>
+        {{ form_end(form) }}
+
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>Compte Affaire</th>
+                <th>Compte Evènement</th>
+                <th>Compte Dernier Evènement</th>
+                <th>Numéro de fiche</th>
+                <th>Propriétaire</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+                <tr>
+                    <td>{{item.compteAffaire}}</td>
+                    <td>{{item.compteEvent}}</td>
+                    <td>{{item.dernierEvent}}</td>
+                    <td>{{item.numeroFiche}}</td>
+                    <td>{{item.nom}} {{item.prenom}}</td>
+                    <td>
+                        <i class="btn btn-sm fa fa-edit"></i>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
 
