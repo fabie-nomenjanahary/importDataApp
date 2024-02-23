@@ -13,8 +13,11 @@ class UploadFileType extends AbstractType
     {
         $builder
             ->add('data_file',FileType::class,[
-                'label' => 'Importer',
                 'mapped' => false,
+                'label'=>'',
+                'attr' => [
+                    'class'=>"form-control"
+                ]
             ]);
         ;
     }
