@@ -14,14 +14,17 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Form\UploadFileType;
 use App\Entity\Vehicule;
 use App\Entity\Vendeur;
+use App\Repository\VehiculeRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class UploadFileController extends AbstractController
 {
     #[Route('/upload/file', name: 'app_upload_file')]
-    public function index(ManagerRegistry $doctrine,Request $request)
+    public function index(ManagerRegistry $doctrine,Request $request,VehiculeRepository $vehiculeRepository)
     {
         //Form for uploading the file
+        $entityManager=$doctrine->getManager();
+
         $form = $this->createForm(UploadFileType::class);
         $form->handleRequest($request);
 
@@ -35,7 +38,6 @@ class UploadFileController extends AbstractController
             $rows = $spreadsheet->getActiveSheet()->removeRow(1);
             //Convert the data into an array
             $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-            $entityManager=$doctrine->getManager();
             foreach ($sheetData as &$row){
                 // Define an array of required column names
                 $requiredColumns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI'];
@@ -179,6 +181,7 @@ class UploadFileController extends AbstractController
                         $vehicule->setNumeroDossier($numeroDossier);
                         $vehicule->setProprietaire($proprietaire);
                         $vehicule->setCompte($compte);
+                        $vehicule->setVendeur($vendeur);
                         $entityManager->persist($vehicule);
                         $entityManager->flush();
                     }
@@ -202,9 +205,22 @@ class UploadFileController extends AbstractController
             }
 
         }
-
+        // $data = $entityManager->getRepository(Vendeur::class)->findOneBy(array('vendeurVN' => $vendeurVN,'vendeurVO' => $vendeurVO,'intermediaire' => $intermediaire));
+        // $data=$vehiculeRepository->findAllWithRelatedData();
+        $vehicules = $entityManager->getRepository(Vehicule::class)
+        ->createQueryBuilder('v')
+        ->leftJoin('v.compte', 'c')
+        ->leftJoin('v.proprietaire', 'p')
+        ->leftJoin('p.adresse', 'a')
+        ->leftJoin('p.contact', 'ct')
+        ->leftJoin('v.vendeur', 'vd')
+        ->leftJoin('v.evenements', 'e')
+        ->getQuery()
+        ->getResult();
+        dd($vehicules);
         return $this->render('upload_file/upload.html.twig', [
             'form' => $form->createView(),
+            'data'=>[]
         ]);
     }
     public function convertStringToDate($format,$dateString){
