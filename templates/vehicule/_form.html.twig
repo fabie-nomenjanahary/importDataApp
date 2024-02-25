@@ -1,0 +1,47 @@
+<div class="container">
+{{ form_start(form) }}
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            {{ form_row(form.numeroFiche) }}
+            {{ form_row(form.dateCircul) }}
+            {{ form_row(form.dateAchat) }}
+            {{ form_row(form.marque) }}
+            {{ form_row(form.modele) }}
+            {{ form_row(form.version) }}
+            {{ form_row(form.VIN) }}
+            {{ form_row(form.matricule) }}
+            {{ form_row(form.prospect) }}
+            {{ form_row(form.kilometrage) }}
+            {{ form_row(form.energie) }}
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            {{ form_row(form.typeVehicule) }}
+            {{ form_row(form.numeroDossier) }}
+            {{ form_row(form.proprietaire.surnom) }}
+            {{ form_row(form.proprietaire.nom) }}
+            {{ form_row(form.proprietaire.prenom) }}
+            {{ form_row(form.proprietaire.civilite) }}
+            {{ form_row(form.proprietaire.adresse.voie) }}
+            {{ form_row(form.proprietaire.adresse.codePostal) }}
+            {{ form_row(form.proprietaire.adresse.ville) }}
+            {{ form_row(form.proprietaire.adresse.complementAdr) }}
+            {{ form_row(form.proprietaire.contact.email) }}
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4">
+            {{ form_row(form.proprietaire.contact.telDomicile) }}
+            {{ form_row(form.proprietaire.contact.telPortable) }}
+            {{ form_row(form.proprietaire.contact.telJob) }}
+            {{ form_row(form.compte.compteAffaire) }}
+            {{ form_row(form.compte.compteEvent) }}
+            {{ form_row(form.compte.dernierEvent) }}
+            {{ form_row(form.vendeur.vendeurVN) }}
+            {{ form_row(form.vendeur.vendeurVO) }}
+            {{ form_row(form.vendeur.intermediaire) }}
+            <br>
+            <center>
+                <button class="btn btn-dark"><i class="fa fa-save"></i>{{ button_label|default('Enregistrer') }}</button>
+            </center>
+        </div>
+    </div>
+{{ form_end(form) }}
+</div>

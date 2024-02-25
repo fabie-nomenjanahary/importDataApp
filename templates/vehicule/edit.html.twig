@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+    <div style="margin-left:60px;">
+        <h3>Modification</h3>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start"  style="display: flex; align-items: center;">
+            <a href="{{ path('app_upload_file') }}" class="btn btn-primary"><i class="fa fa-arrow-left"></i>Voir la liste</a>
+            {{ include('vehicule/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+        {{ include('vehicule/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+
+{% endblock %}

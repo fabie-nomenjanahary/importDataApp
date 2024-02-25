@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails{% endblock %}
+
+{% block body %}
+<div class="container row">
+    <h3>Détails</h3>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start"  style="display: flex; align-items: center;">
+        <a href="{{ path('app_upload_file') }}" class="btn btn-primary"><i class="fa fa-arrow-left"></i>Voir la liste</a>
+
+        <a href="{{ path('app_vehicule_edit', {'id': vehicule.id}) }}" class="btn btn-warning"><i class="fa fa-pen text-white"></i>Modifier</a>
+
+        {{ include('vehicule/_delete_form.html.twig') }}
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>Compte Affaire</th>
+                    <td>{{ vehicule.compte ? vehicule.compte.compteAffaire : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Compte évènement (Veh)</th>
+                    <td>{{ vehicule.compte ? vehicule.compte.compteEvent : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Compte dernier évènement (Veh)</th>
+                    <td>{{ vehicule.compte ? vehicule.compte.dernierEvent : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Numero de Fiche</th>
+                    <td>{{ vehicule.numeroFiche }}</td>
+                </tr>
+                <tr>
+                    <th>Libellé civilité</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.civilite : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Propriétaire actuel du véhicule</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.surnom : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.nom : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Prénom</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.prenom : '' }}</td>
+                </tr>
+            <tr>
+                    <th>N° et Nom de la voie</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.adresse.voie : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Complément adresse 1</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.adresse.complementAdr : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Code postal</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.adresse.codePostal : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Ville</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.adresse.ville : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone domicile</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.contact.telDomicile : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone portable</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.contact.telPortable : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Téléphone job</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.contact.telJob : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ vehicule.proprietaire ? vehicule.proprietaire.contact.email : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Date de mise en circulation</th>
+                    <td>{{ vehicule.dateCircul ? vehicule.dateCircul|date('d/m/Y') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Date achat (date de livraison)</th>
+                    <td>{{ vehicule.dateAchat ? vehicule.dateAchat|date('d/m/Y') : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>Date dernier évènement (Veh)</th>
+                    <td>{{ vehicule.evenement ? vehicule.evenement.dateDernierEvent|date('d/m/Y') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Libellé marque (Mrq)</th>
+                    <td>{{ vehicule.marque }}</td>
+                </tr>
+                <tr>
+                    <th>Libellé modèle (Mod)</th>
+                    <td>{{ vehicule.modele }}</td>
+                </tr>
+                <tr>
+                    <th>Version</th>
+                    <td>{{ vehicule.version }}</td>
+                </tr>
+                <tr>
+                    <th>VIN</th>
+                    <td>{{ vehicule.VIN }}</td>
+                </tr>
+                <tr>
+                    <th>Immatriculation</th>
+                    <td>{{ vehicule.matricule }}</td>
+                </tr>
+                <tr>
+                    <th>Type de prospect</th>
+                    <td>{{ vehicule.prospect }}</td>
+                </tr>
+                <tr>
+                    <th>Kilométrage</th>
+                    <td>{{ vehicule.kilometrage }}</td>
+                </tr>
+                <tr>
+                    <th>Libellé énergie (Energ)</th>
+                    <td>{{ vehicule.energie }}</td>
+                </tr>
+                <tr>
+                    <th>Vendeur VN</th>
+                    <td>{{ vehicule.vendeur ? vehicule.vendeur.vendeurVN : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Vendeur VO</th>
+                    <td>{{ vehicule.vendeur ? vehicule.vendeur.vendeurVO : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Commentaire de facturation (Veh)</th>
+                    <td>{{ vehicule.evenement ? vehicule.evenement.commentaire : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Type VN VO</th>
+                    <td>{{ vehicule.typeVehicule }}</td>
+                </tr>
+                <tr>
+                    <th>Numéro de dossier VN VO</th>
+                    <td>{{ vehicule.numeroDossier }}</td>
+                </tr>
+                <tr>
+                    <th>Intermediaire de vente VN</th>
+                    <td>{{ vehicule.vendeur ? vehicule.vendeur.intermediaire : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Date évènement (Veh)</th>
+                    <td>{{ vehicule.evenement ? vehicule.evenement.dateEvent|date('d/m/Y') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Origine évènement (Veh)</th>
+                    <td>{{ vehicule.evenement ? vehicule.evenement.origineEvent : '' }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
