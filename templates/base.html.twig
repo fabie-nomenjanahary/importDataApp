@@ -9,17 +9,42 @@
         	<link rel="stylesheet" href="{{ asset('assets/css/dataTables.dataTables.min.css') }}">
         	<link rel="stylesheet" href="{{ asset('assets/fontawesome/css/fontawesome.min.css') }}">
         {% endblock %}
-
+        {% block style %}
+            <style>
+                .btn-group-xs > .btn, .btn-xs {
+                    padding: .25rem .4rem;
+                    font-size: .875rem;
+                    line-height: .5;
+                    border-radius: .2rem;
+                }
+            </style>
+        {% endblock %}
         {% block javascripts %}
         	<script src="{{ asset('assets/js/jquery-3.7.1.min.js') }}"></script>
         	<script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
         	<script src="{{ asset('assets/js/dataTables.min.js') }}"></script>
+        	<script src="{{ asset('assets/js/dataTables.fixedHeader.js') }}"></script>
+        	<script src="{{ asset('assets/js/fixedHeader.dataTables.js') }}"></script>
         	<script src="{{ asset('assets/fontawesome/js/all.min.js') }}"></script>
             <script src="{{ asset('assets/js/app.js') }}"></script>
-
         {% endblock %}
     </head>
     <body>
+        {% block navbar %}
+        <div class="collapse" id="navbarToggleExternalContent">
+            <div class="bg-dark p-4">
+                <h5 class="text-white h4">Test technique</h5>
+                <span class="text-muted">Profil: Dev full stack php symfony</span>
+            </div>
+        </div>
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+        {% endblock %}
         {% block body %}{% endblock %}
     </body>
 </html>
