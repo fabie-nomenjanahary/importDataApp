@@ -1,63 +1,104 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+<br>
 <div class="container">
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#uploadModal">
-            <i class="fa fa-download"></i>
-        Importer
-        </button>
-    </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="uploadModalLabel">Importer des données</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    {# Error or Success messages after doing an action #}
+        {% for message in app.flashes('success') %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-            Pour importer des données, sélectionnez un fichier Excel
-            {{ form_start(form) }}
-            {{ form_row(form.data_file) }}
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-            <button type="submit" class="btn btn-primary">Importer</button>
-        {{ form_end(form) }}
+        {% endfor %}
 
+        {% for message in errors %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        </div>
-    </div>
-    </div>
+        {% endfor %}
+    {# --------------------------------- #}
 
-    <table id="myTable" class="display">
-        <thead>
-            <tr>
-                <th>Compte Affaire</th>
-                <th>Compte Evènement</th>
-                <th>Compte Dernier Evènement</th>
-                <th>Numéro de fiche</th>
-                <th>Propriétaire</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in data %}
+    {# Modal for uploading the file you want to import into database #}
+        <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uploadModalLabel">Importer des données</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Pour importer des données, sélectionnez un fichier Excel
+                    {{ form_start(form) }}
+                    {{ form_errors(form) }}
+                    {{ form_row(form.data_file) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Importer</button>
+                    {{ form_end(form) }}
+                </div>
+                </div>
+            </div>
+        </div>
+    {# ---------------------------------- #}
+    <div class="row">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            {# Button which toggles the upload file modal #}
+                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                    <i class="fa fa-download"></i>
+                Importer
+                </button>
+            {# ---------------------------------- #}
+            {# Create new data button #}
+                <a href="{{ path('app_vehicule_new') }}" class="btn btn-info text-white text-bold"><i class="fa fa-plus text-white text-bold"></i>Ajouter</a>
+            {# ---------------------------------- #}
+            </div>
+
+        <table id="myTable" class="display">
+            <thead>
                 <tr>
-                    <td>{{item.compteAffaire}}</td>
-                    <td>{{item.compteEvent}}</td>
-                    <td>{{item.dernierEvent}}</td>
-                    <td>{{item.numeroFiche}}</td>
-                    <td>{{item.nom}} {{item.prenom}}</td>
-                    <td>
-                        <i class="btn btn-sm fa fa-edit"></i>
-                    </td>
+                    <th class="text-sm-center">Compte Affaire</th>
+                    <th class="text-sm-center">Compte Dernier Evènement</th>
+                    <th class="text-sm-center">Numéro de fiche</th>
+                    <th class="text-sm-center">Propriétaire</th>
+                    <th class="">Actions</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    <tr>
+                        <td class="text-sm-center">{{item.compte.compteAffaire}}</td>
+                        <td class="text-sm-center">{{item.compte.dernierEvent}}</td>
+                        <td class="text-sm-center">{{item.numeroFiche}}</td>
+                        <td class="text-sm-center">{{item.proprietaire.nom}} {{item.proprietaire.prenom}}</td>
+                        <td style="display: flex; align-items: center;">
+                        {# This will show the remaining field of the data #}
+                            <a class="btn btn-xs btn-primary" href="{{ path('app_vehicule_show', {'id': item.id}) }}" data-toggle="tooltip" data-placement="top" title="details" style="margin-left: auto;"><i class="fa fa-eye text-white"></i></a>
+                        {# ---------------------------------- #}
+                            <a class="btn btn-xs btn-warning" href="{{ path('app_vehicule_edit', {'id': item.id}) }}" data-toggle="tooltip" data-placement="top" title="modifier" style="margin-left: auto;"><i class="fa fa-pen text-white"></i></a>
+                            <form method="post" action="{{ path('app_vehicule_delete', {'id': item.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet élément?');" style="margin-left: auto;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+                                <button class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            {# Footer for the filter inputs #}
+            <tfoot>
+                <tr>
+                    <th class="text-sm-center">Compte Affaire</th>
+                    <th class="text-sm-center">Compte Dernier Evènement</th>
+                    <th class="text-sm-center">Numéro de fiche</th>
+                    <th class="text-sm-center">Propriétaire</th>
+                    <th style="display:none">Actions</th>
+                </tr>
+            </tfoot>
+            {# ---------------------------------- #}
+        </table>
+    </div>
 </div>
 {% endblock %}
 
