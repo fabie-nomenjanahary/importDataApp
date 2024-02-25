@@ -45,4 +45,16 @@ class VehiculeRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findAllVehiculesWithAllRelatedData() {
+        $vehicules = $this->createQueryBuilder('v')
+                            ->leftJoin('v.compte', 'c')
+                            ->leftJoin('v.proprietaire', 'p')
+                            ->leftJoin('p.adresse', 'a')
+                            ->leftJoin('p.contact', 'ct')
+                            ->leftJoin('v.vendeur', 'vd')
+                            ->leftJoin('v.evenement', 'e')
+                            ->getQuery()
+                            ->getResult();
+        return $vehicules;
+    }
 }
