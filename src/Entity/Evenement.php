@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EvenementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,8 +28,13 @@ class Evenement
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateDernierEvent = null;
 
-    #[ORM\ManyToOne(inversedBy: 'evenements', fetch: 'EAGER')]
-    private ?Vehicule $vehicule = null;
+    #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'evenement', fetch: 'EAGER')]
+    private Collection $vehicules;
+
+    public function __construct()
+    {
+        $this->vehicules = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -82,14 +89,32 @@ class Evenement
         return $this;
     }
 
-    public function getVehicule(): ?Vehicule
+    /**
+     * @return Collection<int, Vehicule>
+     */
+    public function getVehicules(): Collection
     {
-        return $this->vehicule;
+        return $this->vehicules;
     }
 
-    public function setVehicule(?Vehicule $vehicule): static
+    public function addVehicule(Vehicule $vehicule): static
     {
-        $this->vehicule = $vehicule;
+        if (!$this->vehicules->contains($vehicule)) {
+            $this->vehicules->add($vehicule);
+            $vehicule->setEvenement($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVehicule(Vehicule $vehicule): static
+    {
+        if ($this->vehicules->removeElement($vehicule)) {
+            // set the owning side to null (unless already changed)
+            if ($vehicule->getEvenement() === $this) {
+                $vehicule->setEvenement(null);
+            }
+        }
 
         return $this;
     }

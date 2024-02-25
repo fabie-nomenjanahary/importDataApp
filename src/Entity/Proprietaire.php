@@ -24,7 +24,7 @@ class Proprietaire
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $prenom = null;
 
-    #[ORM\ManyToOne(inversedBy: 'proprietaires')]
+    #[ORM\ManyToOne(inversedBy: 'proprietaires', fetch: 'EAGER',cascade:["persist"])]
     private ?Adresse $adresse = null;
 
     #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'proprietaire')]
@@ -33,7 +33,7 @@ class Proprietaire
     #[ORM\Column(length: 3, nullable: true)]
     private ?string $civilite = null;
 
-    #[ORM\ManyToOne(inversedBy: 'proprietaires')]
+    #[ORM\ManyToOne(inversedBy: 'proprietaires', fetch: 'EAGER',cascade:["persist"])]
     private ?Contact $contact = null;
 
     public function __construct()

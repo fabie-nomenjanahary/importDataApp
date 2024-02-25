@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\VehiculeRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -55,22 +53,21 @@ class Vehicule
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $numeroDossier = null;
 
-    #[ORM\ManyToOne(inversedBy: 'vehicules', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'vehicules', fetch: 'EAGER',cascade:["persist"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Proprietaire $proprietaire = null;
 
-    #[ORM\OneToMany(targetEntity: Evenement::class, mappedBy: 'vehicule', fetch: 'EAGER')]
-    private Collection $evenements;
-
-    #[ORM\ManyToOne(inversedBy: 'vehicules', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'vehicules', fetch: 'EAGER',cascade:["persist"])]
     private ?Compte $compte = null;
 
-    #[ORM\ManyToOne(inversedBy: 'vehicules', fetch: 'EAGER')]
+    #[ORM\ManyToOne(inversedBy: 'vehicules', fetch: 'EAGER',cascade:["persist"])]
     private ?Vendeur $vendeur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'vehicules', fetch: 'EAGER',cascade:["persist"])]
+    private ?Evenement $evenement = null;
 
     public function __construct()
     {
-        $this->evenements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -246,36 +243,6 @@ class Vehicule
         return $this;
     }
 
-    /**
-     * @return Collection<int, Evenement>
-     */
-    public function getEvenements(): Collection
-    {
-        return $this->evenements;
-    }
-
-    public function addEvenement(Evenement $evenement): static
-    {
-        if (!$this->evenements->contains($evenement)) {
-            $this->evenements->add($evenement);
-            $evenement->setVehicule($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvenement(Evenement $evenement): static
-    {
-        if ($this->evenements->removeElement($evenement)) {
-            // set the owning side to null (unless already changed)
-            if ($evenement->getVehicule() === $this) {
-                $evenement->setVehicule(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getCompte(): ?Compte
     {
         return $this->compte;
@@ -296,6 +263,18 @@ class Vehicule
     public function setVendeur(?Vendeur $vendeur): static
     {
         $this->vendeur = $vendeur;
+
+        return $this;
+    }
+
+    public function getEvenement(): ?Evenement
+    {
+        return $this->evenement;
+    }
+
+    public function setEvenement(?Evenement $evenement): static
+    {
+        $this->evenement = $evenement;
 
         return $this;
     }
